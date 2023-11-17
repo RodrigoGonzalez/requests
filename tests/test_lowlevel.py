@@ -168,7 +168,7 @@ def test_digestauth_only_on_4xx():
         r = requests.get(url, auth=auth)
         # Verify server didn't receive auth from us.
         assert r.status_code == 200
-        assert len(r.history) == 0
+        assert not r.history
         close_server.set()
 
 
@@ -180,9 +180,9 @@ _schemes_by_var_prefix = [
 
 _proxy_combos = []
 for prefix, schemes in _schemes_by_var_prefix:
-    for scheme in schemes:
-        _proxy_combos.append(("{0}_proxy".format(prefix), scheme))
-
+    _proxy_combos.extend(
+        ("{0}_proxy".format(prefix), scheme) for scheme in schemes
+    )
 _proxy_combos += [(var.upper(), scheme) for var, scheme in _proxy_combos]
 
 

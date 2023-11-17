@@ -318,38 +318,25 @@ ENCODED_USER = compat.quote(USER, '')
 ENCODED_PASSWORD = compat.quote(PASSWORD, '')
 
 
-@pytest.mark.parametrize(
-    'url, auth', (
-        (
-            'http://' + ENCODED_USER + ':' + ENCODED_PASSWORD + '@' +
-            'request.com/url.html#test',
-            (USER, PASSWORD)
-        ),
-        (
+@pytest.mark.parametrize('url, auth', ((f'http://{ENCODED_USER}:{ENCODED_PASSWORD}@request.com/url.html#test', (USER, PASSWORD)), (
             'http://user:pass@complex.url.com/path?query=yes',
             ('user', 'pass')
-        ),
-        (
+        ), (
             'http://user:pass%20pass@complex.url.com/path?query=yes',
             ('user', 'pass pass')
-        ),
-        (
+        ), (
             'http://user:pass pass@complex.url.com/path?query=yes',
             ('user', 'pass pass')
-        ),
-        (
+        ), (
             'http://user%25user:pass@complex.url.com/path?query=yes',
             ('user%user', 'pass')
-        ),
-        (
+        ), (
             'http://user:pass%23pass@complex.url.com/path?query=yes',
             ('user', 'pass#pass')
-        ),
-        (
+        ), (
             'http://complex.url.com/path?query=yes',
             ('', '')
-        ),
-    ))
+        )))
 def test_get_auth_from_url(url, auth):
     assert get_auth_from_url(url) == auth
 
@@ -571,7 +558,7 @@ def test_add_dict_to_cookiejar(cookiejar):
     cookiedict = {'test': 'cookies',
                   'good': 'cookies'}
     cj = add_dict_to_cookiejar(cookiejar, cookiedict)
-    cookies = dict((cookie.name, cookie.value) for cookie in cj)
+    cookies = {cookie.name: cookie.value for cookie in cj}
     assert cookiedict == cookies
 
 
